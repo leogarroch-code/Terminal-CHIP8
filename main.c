@@ -15,6 +15,8 @@
 #define DARK_PIXEL 0x5f
 #define LIGHT_PIXEL 0xdb
 
+#define GAME_SPEED 1
+
 #define SCREEN_SIZE_X (0x3F+1)
 #define SCREEN_SIZE_Y (0x1F+1)
 #define MEMORY_SIZE (0xFFF)
@@ -516,11 +518,17 @@ int main(void)
     /* +#+        +#+  +#+ +#+      +#+       +#+    +#+    +#+    +#+           +#+      +#+    +#++#+    +#++#+        */
     /* #+#       #+#    #+##+#      #+#    #+##+#    #+#    #+#    #+#           #+#      #+#    #+##+#    #+##+#        */
     /* #############    #####################  ########     ###    ##########    ##################  ######## ###        */
+    static uint8_t gameTic = 2;
+    #if GAME_SPEED == 1
+        gameTic = 2;
+    #elif GAME_SPEED == 2
+        gameTic = 1;
+    #endif
 
     while(PC < MEMORY_SIZE)
     {
         ftime(&end);
-        if((1000.0 * (end.time - t_clock.time)+(end.millitm - t_clock.millitm)) > 2)
+        if((1000.0 * (end.time - t_clock.time)+(end.millitm - t_clock.millitm)) > gameTic)
         {
             ftime(&t_clock);
             execute((memory[PC]<<8)+memory[PC+1]);
