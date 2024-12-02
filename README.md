@@ -11,7 +11,8 @@ Using conio.h and printf making it (probably) very Windows backwards compatible!
 ```
 to build and run in pwr shell with tcc use
 > .\tcc.exe <path-to_repo>/main.c -run
-then copy path to the .ch8 file (no spaces, no more than 1024 character path)
+>
+> then copy path to the .ch8 file (no spaces, no more than 1024 character path)
 
 also build with the DB flag set to 1 to get instruction by instruction debug info
 
