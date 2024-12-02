@@ -15,6 +15,7 @@ then copy path to the .ch8 file (no spaces, no more than 1024 character path)
 
 also build with the DB flag set to 1 to get instruction by instruction debug info
 
+----
 TODO:
   - [ ] a more GDB like debug interface
   - [ ] optimise a little
@@ -23,10 +24,13 @@ TODO:
   - [ ] better rom selection
   - [ ] sound? (have not figured out easiest way for this yet)
   - [ ] learn window.h or sdl2
-
+----
 font generated with [http://www.network-science.de/ASCII/](http://www.network-science.de/ascii/)
+
 chip-8 resources:
-    [https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set](https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set)
-    [https://chip-8.github.io/links/](https://chip-8.github.io/links/)
-    [https://github.com/Timendus/chip8-test-suite](https://github.com/Timendus/chip8-test-suite)
-    [http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
+
+  - [https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set](https://github.com/mattmikolay/chip-8/wiki/CHIP%E2%80%908-Instruction-Set)
+  - [https://chip-8.github.io/links/](https://chip-8.github.io/links/)
+  - [https://github.com/Timendus/chip8-test-suite](https://github.com/Timendus/chip8-test-suite)
+  - [http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/](http://www.multigesture.net/articles/how-to-write-an-emulator-chip-8-interpreter/)
+    
