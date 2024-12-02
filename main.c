@@ -4,7 +4,7 @@
 #include <sys\timeb.h> 
 #include <conio.h>
 
-#define DB 1
+#define DB (0)
 
 // #define DARK_PIXEL 176
 // #define LIGHT_PIXEL 178
