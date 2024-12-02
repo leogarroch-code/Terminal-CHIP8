@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <stdbool.h>
+#include <stdlib.h>
 #include <sys\timeb.h> 
 #include <conio.h>
+
+#define DB 1
 
 // #define DARK_PIXEL 176
 // #define LIGHT_PIXEL 178
@@ -204,11 +206,30 @@ void checkKeyboard()
 void execute(uint16_t instruction)
 {
     uint8_t code = instruction>>12;
-    uint8_t *VY = &registers[(instruction>>4)&0xF];
     uint8_t *VX = &registers[(instruction>>8)&0xF];
+    uint8_t *VY = &registers[(instruction>>4)&0xF];
     uint8_t subcode4 = instruction&0xF;
     uint8_t subcode8 = instruction&0xFF;
     static uint8_t stack_ptr = 0;
+
+    #if DB
+    printf("instruction=%04x, I=%04x\nVX=V%1x=%02x,VY=V%1x=%02x\n",
+    instruction,
+    I,
+    (instruction>>8)&0xF,
+    *VX,
+    (instruction>>4)&0xF,
+    *VY
+    );
+    printf("registers= |");
+    for(int i =0; i<=0xF; i++)
+        printf("%02x|",registers[i]);
+    printf("\n");
+    printf("stack_ptr %02x\n", stack_ptr);
+    printf("stack at ptr %02x\n",stack[stack_ptr]);
+    getchar();
+    #endif
+
     switch(code)
     {
         case 0x0:
@@ -337,7 +358,7 @@ void execute(uint16_t instruction)
                     if((screen[x_coord][y_coord]) && ((mem8>>(7-i))&0x1))
                         *VF = 1;
                     screen[x_coord][y_coord] ^= (mem8>>(7-i))&0x1;
-                    
+                
                 }
             }
             break;
@@ -372,7 +393,7 @@ void execute(uint16_t instruction)
                     delayTimer = *VX;
                     break;
                 case 0x18:
-                    // soundTimer = *VX;
+                    soundTimer = *VX;
                     // printf("\a");
                     break;
                 case 0x1E:
@@ -425,14 +446,6 @@ void execute(uint16_t instruction)
 /* #+#    #+##+#       #+#    #+# */
 /*  ######## ###        ########  */
 
-bool compareScreen()
-{
-    uint16_t lastInstruction = (memory[PC-2]<<8)+memory[PC-1];   
-    if((lastInstruction == 0x00EE) || ((lastInstruction&0xFF00) == 0xD000))
-        return true;
-    return false;
-}
-
 void printScreen()
 {
     static char screenPrintBuf[SCREEN_SIZE_Y*SCREEN_SIZE_X+100] = {0};
@@ -450,7 +463,7 @@ void printScreen()
         }
         sprintf(&screenPrintBuf[n++],"\n");
     }
-    sprintf(&screenPrintBuf[n++],"PC = %4x\n",PC);
+    sprintf(&screenPrintBuf[n++],"PC = %04x\n",PC);
     fwrite(screenPrintBuf, sizeof(char), n+9, stdout);
 }
 
@@ -464,7 +477,7 @@ void printScreen()
 
 int main(void)
 {
-    struct timeb t_key,t_clock,t_60,end;
+    struct timeb t_clock,t_60,end;
     ftime(&t_clock);
     ftime(&t_60);
     for(int i = 0; i < 80; ++i)
@@ -478,7 +491,7 @@ int main(void)
     /* +#+    +#++#+    +#++#+       +#+    +#+    +#++#+     +#++#+  +#+#+#+#+    +#++#+       +#+       +#+    +#+ */
     /* #+#    #+##+#    #+##+#       #+#    #+#    #+##+#     #+##+#   #+#+##+#    #+##+#       #+#       #+#    #+# */
     /* ###    ### ######## ###       ###    ###    ######     ######    ############# #######################    ### */
-    char rompath[255] = "";
+    char* rompath = malloc(1024);
     scanf("%s",rompath);
     char c;
     while((c = getchar()) != '\n' && c != EOF);
@@ -495,7 +508,7 @@ int main(void)
         memory[i++] = fgetc(file)&0xFF;
     }
     fclose(file);
-
+    free(rompath);
     /* :::::::::::::    ::::::::::::::::::::: :::    ::::::::::::::::::::::::    :::       ::::::::  :::::::: :::::::::  */
     /* :+:       :+:    :+::+:      :+:    :+::+:    :+:    :+:    :+:           :+:      :+:    :+::+:    :+::+:    :+: */
     /* +:+        +:+  +:+ +:+      +:+       +:+    +:+    +:+    +:+           +:+      +:+    +:++:+    +:++:+    +:+ */
@@ -524,10 +537,7 @@ int main(void)
             }
         }
         checkKeyboard();
-        if(compareScreen())
-        {
-            printScreen();
-        }
+        printScreen();
     }
     return 0;
 }
